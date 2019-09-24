@@ -75,6 +75,6 @@ public class Project {
         // example return String: "Project0 6 30"
     @Override
     public String toString() {
-        return this.name + " " + this.employeeWorkWeeks + " " + this.profitInThousands + "\n";
+        return  "\n" + this.name + " " + this.employeeWorkWeeks + " " + this.profitInThousands + "\n";
     }
 }
