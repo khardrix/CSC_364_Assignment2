@@ -14,7 +14,7 @@
  *****    - int representing the amount of profit (measured in thousands) expected to be made from this Project   *****
  *****                                                                                                            *****
  *****    This class contains a 3-arg Constructor to initialize a Project Object with the above instance datum.   *****
- *****                   This class also contains getters and setters for all instance datum and                  *****
+ *****                         This class also contains getters for all instance datum and                        *****
  *****                               overrides the Object Class's .toString() method.                             *****
  **********************************************************************************************************************
  ******************************************************************************************************************** */
@@ -41,33 +41,15 @@ public class Project {
     }
 
 
-    // Setter for private String name
-    public void setName(String name) {
-        this.name = name;
-    }
-
-
     // Getter for private int employeeWorkWeeks
     public int getEmployeeWorkWeeks() {
         return employeeWorkWeeks;
     }
 
 
-    // Setter for private int employeeWorkWeeks
-    public void setEmployeeWorkWeeks(int employeeWorkWeeks) {
-        this.employeeWorkWeeks = employeeWorkWeeks;
-    }
-
-
     // Getter for private int profitInThousands
     public int getProfitInThousands() {
         return profitInThousands;
-    }
-
-
-    // Setter for private int profitInThousands
-    public void setProfitInThousands(int profitInThousands) {
-        this.profitInThousands = profitInThousands;
     }
 
 
