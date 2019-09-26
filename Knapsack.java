@@ -178,36 +178,17 @@ public class Knapsack {
             }
         }
 
-        // THESE FOR LOOPS ARE TO PRINT THE ARRAY FOR TESTING! REMOVE AFTER TESTING! ////////////////////////////////
-        for(int i = 0; i < K.length; i++){
-            System.out.print("\n");
-            for(int m = 0; m < K[i].length; m++){
-                if(K[i][m] >= 10_000){
-                    System.out.print(K[i][m] + "   ");
-                } else if(K[i][m] >= 1_000){
-                    System.out.print(K[i][m] + "    ");
-                } else if(K[i][m] >= 100){
-                    System.out.print(K[i][m] + "     ");
-                } else if(K[i][m] >= 10){
-                    System.out.print(K[i][m] + "      ");
-                } else {
-                    System.out.print(K[i][m] + "       ");
-                }
-
-            }
-        }
-
         // while loop to go through the solution 2D int matrix. The while loops ends when sj <= 0
         while(sj > 0){
-            // if statement that checks if the current cell has a profit value greater than the cell above it
-            if(K[sj][sw] > K[sj - 1][sw]){
-                // Decrease the value of sw by the number of work weeks required by the current Project
-                sw -= projects.get(sj).getEmployeeWorkWeeks();
+            // if statement that checks if the current cell is equal to the cell above it
+            if(K[sj][sw] == K[sj - 1][sw]){
                 // Decrement sj
                 sj--;
-                // Add the current Project to the solution Project ArrayList, maxProfitProjects
-                maxProfitProjects.add(projects.get(sj));
             } else {
+                // Add the current Project to the solution Project ArrayList, maxProfitProjects
+                maxProfitProjects.add(projects.get(sj - 1));
+                // Decrease the value of sw by the number of work weeks required by the current Project
+                sw -= projects.get(sj - 1).getEmployeeWorkWeeks();
                 // Decrement sj
                 sj--;
             }
