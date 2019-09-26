@@ -5,6 +5,8 @@
  *****         Programming Assignment #2: Optimizing Profit of Available Projects Using Dynamic Programming       *****
  *****                                (Knapsack Without Repetition Problem)                                       *****
  *****____________________________________________________________________________________________________________*****
+ *****                                             Main Class                                                     *****
+ *****------------------------------------------------------------------------------------------------------------*****
  *****                 This program is designed to solve the "Knapsack Without Repetition Problem"                *****
  *****           The basis of this "Knapsack problem" is a software company and their profit potential.           *****
  *****                                                                                                            *****
