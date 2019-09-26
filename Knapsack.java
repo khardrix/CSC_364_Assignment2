@@ -20,19 +20,10 @@
  *****              (input and output files were opened successfully) and then call the .close() method           *****
  *****                            on the files if the files were not equal to null.                               *****
  *****                                                                                                            *****
- *****                                                                                                            *****
- *****                     MORE COMMENTS TO GO HERE ONCE PROGRAM IS FINISHED BEING WRITTEN                        *****
- *****                     MORE COMMENTS TO GO HERE ONCE PROGRAM IS FINISHED BEING WRITTEN                        *****
- *****                     MORE COMMENTS TO GO HERE ONCE PROGRAM IS FINISHED BEING WRITTEN                        *****
- *****                     MORE COMMENTS TO GO HERE ONCE PROGRAM IS FINISHED BEING WRITTEN                        *****
- *****                     MORE COMMENTS TO GO HERE ONCE PROGRAM IS FINISHED BEING WRITTEN                        *****
- *****                     MORE COMMENTS TO GO HERE ONCE PROGRAM IS FINISHED BEING WRITTEN                        *****
- *****                     MORE COMMENTS TO GO HERE ONCE PROGRAM IS FINISHED BEING WRITTEN                        *****
- *****                     MORE COMMENTS TO GO HERE ONCE PROGRAM IS FINISHED BEING WRITTEN                        *****
- *****                     MORE COMMENTS TO GO HERE ONCE PROGRAM IS FINISHED BEING WRITTEN                        *****
- *****                     MORE COMMENTS TO GO HERE ONCE PROGRAM IS FINISHED BEING WRITTEN                        *****
+ *****  This program has a private static void knapsack(int maxWW) {...} method that solves the Knapsack Problem. *****
+ *****    After the Knapsack Problem is solved, the results are output to the output file specified by the user.  *****
  **********************************************************************************************************************
- ******************************************************************************************************************** */
+ **********************************************************************************************************************/
 
 // IMPORTS of needed tools and plug-ins
 import java.io.File;
@@ -44,27 +35,20 @@ import java.util.Scanner;
 
 public class Knapsack {
 
-    // CLASS VARIABLE(s) declaration(s)
-    // Declare an ArrayList of Project objects
-    private static ArrayList<Project> projects;
+    // CLASS VARIABLE declaration
+    private static ArrayList<Project> projects; // Project ArrayList to store all Projects in input file
+    private static ArrayList<Project> maxProfitProjects; // Project ArrayList to store solution Projects
 
 
-    public static void main(String[] args) {    // throws FileNotFoundException
+    public static void main(String[] args) {
+
         // Scanner variable to get user input from the console via keyboard input
         Scanner input = new Scanner(System.in);
-
-        // String variables that store the input file's name and the output file's name
-        ///// THESE VARIABLES WILL BE REMOVED AFTER TESTING! THESE NEED TO BE ESTABLISHED THROUGH USER INPUT! /////
-        String inputFileName = "KnapsackData1.txt";
-        String outputFileName = "Output3.txt";
 
         // Declare a Scanner variable to read in from the input file and initialize the variable to null
         Scanner dataFile = null;
         // Declare a PrintWriter variable to write to the output file and initialize the variable to null
         PrintWriter outputFile = null;
-
-        // Declare an ArrayList of Project objects
-        // ArrayList<Project> projects;
 
         // String variables used to store user input on how many employee work weeks are available,
             // the name of the input file and the name of the output file
@@ -92,9 +76,9 @@ public class Knapsack {
         // try block used to attempt to open the input file specified by the user
         try{
             // Initialize the Scanner variable, dataFile
-            dataFile = new Scanner(new File(inputFileName));
+            dataFile = new Scanner(new File(nameOfInputFile));
             // Initialize the PrintWriter variable, outputFile
-            outputFile = new PrintWriter(outputFileName);
+            outputFile = new PrintWriter(nameOfOutputFile);
 
             // Initialize the ArrayList variable, projects
             projects = new ArrayList<>();
@@ -105,15 +89,37 @@ public class Knapsack {
                 // String variable used to store the current line of text from the input file
                 String line = dataFile.nextLine();
                 // String array to split the above String line variable anywhere there is a blank space
-                    // (will separate each line of input into: Project name, employee work weeks and profit)
+                    // (will separate each line of input into: Project name, employee work weeks and profit),
+                    // so that new Project Objects can be added to the ArrayList<Project> projects variable using the
+                    // Project Class's 3-arg constructor, properly
                 String[] split = line.split(" ");
-                // Add to the ArrayList projects: name of Project, employee work weeks and profit
-                    // (one at a time and separated by commas)
+                // Add to the ArrayList projects each Project in the input file specified by the user
                 projects.add(new Project(split[0], Integer.parseInt(split[1]), Integer.parseInt(split[2])));
             }
 
-            ///// TESTING TO MAKE SURE THE ArrayList projects GETS FILLED CORRECTLY AND PRINTS CORRECTLY /////
-            outputFile.println(knapsack(10));
+            // Call the knapsack method to solve the Knapsack Problem
+            knapsack(Integer.parseInt(workWeeks));
+
+            // int variable to store the sum of the profits of the solution to the Knapsack Problem
+            int totalProfit = 0;
+
+            // for loop to add the profit from each of the selected Projects in the solution to the Knapsack Problem
+                // to the int variable, totalProfit
+            for(int i = 0; i < maxProfitProjects.size(); i++){
+                totalProfit += maxProfitProjects.get(i).getProfitInThousands();
+            }
+
+            // Print the results of the Knapsack Problem to the output file specified by the user
+            outputFile.println("Number of projects available: " + projects.size() +
+                    "\nAvailable employee work weeks: " + Integer.parseInt(workWeeks) +
+                    "\nNumber of projects chosen: " + maxProfitProjects.size() +
+                    "\nTotal profit: " + totalProfit);
+            // for loop to print each Project in the solution to the Knapsack Problem to the output file
+                // specified by the user
+            for(int i = maxProfitProjects.size() - 1; i >= 0; i--){
+                outputFile.println(maxProfitProjects.get(i));
+            }
+
         }
         // catch block used for when the file that was specified by the user will not open
             // (it might not exist or there may be another error preventing the file from opening)
@@ -139,75 +145,71 @@ public class Knapsack {
         }
     }
 
-/*
-            Knapsack without repetition
-            Problem instance: (w1, v1), (w2, v2), …, (wn, vn), W
-            Define K(w, j) = maximum value achievable with a
-                knapsack of capacity w and only
-                items 1, …, j available
 
-            Recurrence relation:
-            K(w, j) = max{K(w – wj, j – 1) + vj , K(w, j – 1)}
-            w = weight (vertical column)
+    // Method to solve the Knapsack Problem
+    private static void knapsack(int maxWW){
 
-            Pseudocode:
-            Initialize all K(0, j) = 0 and all K(w, 0) = 0
-            for j = 1 to n:
-	            for w = 1 to W:
-		            if wj > w: K(w, j) = K(w, j – 1)
-		            else: K(w, j) = max{K(w – wj, j – 1) + vj, K(w, j – 1)}
+        // LOCAL VARIABLE declarations
+        maxProfitProjects = new ArrayList<>(); // initialize the maxProfitProjects ArrayList
+        int n = projects.size() + 1; // store the size of the projects ArrayList + 1 to use in below nested for loops
+        int W = maxWW + 1; // store the maximum allotted work weeks + 1 to use in below nested for loops
+        int[][] K = new int[n][W]; // 2D int Array to store result matrix
+        int sj = projects.size(); // to be used in bottom nested for loops to get solution Projects
+        int sw = maxWW; // to be used in bottom nested for loops to get solution Projects
 
-		    Return  K(W,n)
-
-
-            Base cases:
-            K(w, 0) = 0
-            K(0, j) = 0
-
-
-            Loop through items n down to 1.
-            For each item, determine whether the array entry was gotten
-            by including the item or
-            by excluding the item.
-            This will tell you whether to include the item in the solution.
-
-
-
-            Runtime:    O(nW)
-*/
-
-    private static ArrayList<Project> knapsack(int maxWW){
-
-        ArrayList<Project> maxProfitProjects = new ArrayList<>();
-        int n = projects.size() + 1;
-        int W = maxWW + 1;
-        int[][] K = new int[n][W];
-        int sj = projects.size();
-        int sw = maxWW;
-
+        // Nested for loops to go through the 2D int Array, K
         for(int j = 1; j < n; j++){
             for(int w = 1; w < W; w++){
+                // if statement that checks if work weeks required by the current Project is greater than the remaining
+                    // allotted work weeks
                 if(projects.get(j - 1).getEmployeeWorkWeeks() > w){
+                    // Set the value of K[j][w] to th cell above it
                     K[j][w] = K[j - 1][w];
-                } else{
+                }
+                else {
+                    // Set the value of K[j][w] equal to the value that is greater, between
+                        // ( (the profit of the cell above the current cell and to the left equal to the number of work
+                        // weeks required by the current Project) + the profit of the current Project) and
+                        // the cell above the current cell
                     K[j][w] = Math.max(K[j - 1][w - projects.get(j - 1).getEmployeeWorkWeeks()] +
                                     projects.get(j - 1).getProfitInThousands(), K[j - 1][w]);
                 }
             }
         }
 
+        // THESE FOR LOOPS ARE TO PRINT THE ARRAY FOR TESTING! REMOVE AFTER TESTING! ////////////////////////////////
         for(int i = 0; i < K.length; i++){
             System.out.print("\n");
             for(int m = 0; m < K[i].length; m++){
-                System.out.print(K[i][m] + " ");
+                if(K[i][m] >= 10_000){
+                    System.out.print(K[i][m] + " ");
+                } else if(K[i][m] >= 1_000){
+                    System.out.print(K[i][m] + "  ");
+                } else if(K[i][m] >= 100){
+                    System.out.print(K[i][m] + "   ");
+                } else if(K[i][m] >= 10){
+                    System.out.print(K[i][m] + "    ");
+                } else {
+                    System.out.print(K[i][m] + "     ");
+                }
+
             }
         }
 
-        while( (sj > 0) && (sw > 0) ){
-            sj--; /////////////// TO CLEAR WARNINGS!!!!!!! NEED TO WRITE CODE TO GET PROJECTS FROM 2D ARRAY
-            sw--; /////////////// TO CLEAR WARNINGS!!!!!!! NEED TO WRITE CODE TO GET PROJECTS FROM 2D ARRAY
+        // while loop to go through the solution 2D int matrix. The while loops ends when sj <= 0
+        while(sj > 0){
+            // if statement that checks if the current cell has a profit value greater than the cell above it
+            if(K[sj][sw] > K[sj - 1][sw]){
+                // Decrease the value of sw by the number of work weeks required by the current Project
+                sw -= projects.get(sj).getEmployeeWorkWeeks();
+                // Decrement sj
+                sj--;
+                // Add the current Project to the solution Project ArrayList, maxProfitProjects
+                maxProfitProjects.add(projects.get(sj));
+            } else {
+                // Decrement sj
+                sj--;
+            }
         }
-
-        return maxProfitProjects;
     }
 }
