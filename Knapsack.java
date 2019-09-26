@@ -31,6 +31,7 @@
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -42,7 +43,7 @@ public class Knapsack {
     private static ArrayList<Project> maxProfitProjects; // Project ArrayList to store solution Projects
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args){
 
         // Scanner variable to get user input from the console via keyboard input
         Scanner input = new Scanner(System.in);
@@ -55,6 +56,9 @@ public class Knapsack {
         // String variables used to store user input on how many employee work weeks are available,
             // the name of the input file and the name of the output file
         String workWeeks, nameOfInputFile, nameOfOutputFile;
+
+        // Format the total profit from the solution Projects in US Dollars format
+        DecimalFormat dollarFormat = new DecimalFormat("$0,000.00");
 
         // Print to the console a prompt for the user to enter how many employee work weeks are available
         System.out.print("Enter the number of available employee work weeks: ");
@@ -98,6 +102,11 @@ public class Knapsack {
                 projects.add(new Project(split[0], Integer.parseInt(split[1]), Integer.parseInt(split[2])));
             }
 
+            // Print to the console the last of the program session details (number of projects and
+                // a message saying "Done" to let you user know their interaction with the program is complete)
+            System.out.println("Number of projects = " + projects.size() +
+                    "\nDone");
+
             // Call the knapsack method to solve the Knapsack Problem
             knapsack(Integer.parseInt(workWeeks));
 
@@ -114,7 +123,7 @@ public class Knapsack {
             outputFile.println("Number of projects available: " + projects.size() +
                     "\nAvailable employee work weeks: " + Integer.parseInt(workWeeks) +
                     "\nNumber of projects chosen: " + maxProfitProjects.size() +
-                    "\nTotal profit: " + totalProfit);
+                    "\nTotal profit: " + dollarFormat.format(totalProfit));
             // for loop to print each Project in the solution to the Knapsack Problem to the output file
                 // specified by the user
             for(int i = maxProfitProjects.size() - 1; i >= 0; i--){
@@ -129,7 +138,7 @@ public class Knapsack {
         }
         // finally block that executes as long as the program has not exited due to error
             // (executes regardless of what happens in the try and/or catch blocks)
-        finally {
+        finally{
             // if statement that checks if the value of the dataFile (the input file specified by the user) is
                 // not equal to null (the file was successfully opened) and
                 // call the .close() method on the dataFile, if so
@@ -167,7 +176,7 @@ public class Knapsack {
                     // Set the value of K[j][w] to the cell above it
                     K[j][w] = K[j - 1][w];
                 }
-                else {
+                else{
                     // Set the value of K[j][w] equal to the value that is greater, between
                         // ( (the profit of the cell above the current cell and to the left equal to the number of work
                         // weeks required by the current Project) + the profit of the current Project) and
@@ -184,13 +193,13 @@ public class Knapsack {
             if(K[sj][sw] == K[sj - 1][sw]){
                 // Decrement sj
                 sj--;
-            } else {
-                // Add the current Project to the solution Project ArrayList, maxProfitProjects
-                maxProfitProjects.add(projects.get(sj - 1));
-                // Decrease the value of sw by the number of work weeks required by the current Project
-                sw -= projects.get(sj - 1).getEmployeeWorkWeeks();
+            } else{
                 // Decrement sj
                 sj--;
+                // Decrease the value of sw by the number of work weeks required by the current Project
+                sw -= projects.get(sj).getEmployeeWorkWeeks();
+                // Add the current Project to the solution Project ArrayList, maxProfitProjects
+                maxProfitProjects.add(projects.get(sj));
             }
         }
     }
