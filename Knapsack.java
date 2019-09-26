@@ -85,7 +85,6 @@ public class Knapsack {
             // Initialize the ArrayList variable, projects
             projects = new ArrayList<>();
 
-
             // while loop to go through the input file, line by line, until the end of the input file
             while(dataFile.hasNextLine()){
                 // String variable used to store the current line of text from the input file
@@ -156,8 +155,8 @@ public class Knapsack {
         int n = projects.size() + 1; // store the size of the projects ArrayList + 1 to use in below nested for loops
         int W = maxWW + 1; // store the maximum allotted work weeks + 1 to use in below nested for loops
         int[][] K = new int[n][W]; // 2D int Array to store result matrix
-        int sj = projects.size(); // to be used in bottom nested for loops to get solution Projects
-        int sw = maxWW; // to be used in bottom nested for loops to get solution Projects
+        int sj = projects.size(); // to be used in bottom nested for loops to get solution Projects (rows)
+        int sw = maxWW; // to be used in bottom nested for loops to get solution Projects (columns)
 
         // Nested for loops to go through the 2D int Array, K
         for(int j = 1; j < n; j++){
@@ -165,7 +164,7 @@ public class Knapsack {
                 // if statement that checks if work weeks required by the current Project is greater than the remaining
                     // allotted work weeks
                 if(projects.get(j - 1).getEmployeeWorkWeeks() > w){
-                    // Set the value of K[j][w] to th cell above it
+                    // Set the value of K[j][w] to the cell above it
                     K[j][w] = K[j - 1][w];
                 }
                 else {
@@ -184,15 +183,15 @@ public class Knapsack {
             System.out.print("\n");
             for(int m = 0; m < K[i].length; m++){
                 if(K[i][m] >= 10_000){
-                    System.out.print(K[i][m] + " ");
-                } else if(K[i][m] >= 1_000){
-                    System.out.print(K[i][m] + "  ");
-                } else if(K[i][m] >= 100){
                     System.out.print(K[i][m] + "   ");
-                } else if(K[i][m] >= 10){
+                } else if(K[i][m] >= 1_000){
                     System.out.print(K[i][m] + "    ");
-                } else {
+                } else if(K[i][m] >= 100){
                     System.out.print(K[i][m] + "     ");
+                } else if(K[i][m] >= 10){
+                    System.out.print(K[i][m] + "      ");
+                } else {
+                    System.out.print(K[i][m] + "       ");
                 }
 
             }
